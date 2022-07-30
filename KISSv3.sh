@@ -238,16 +238,16 @@ RF_TOOLS(){
     echo -e "${GREEN}Installing RF Tools.(WiFi + Bluetooth + RFID/NFC + SDR)${NC}"
     mkdir $TWD/RF > /dev/null 2>&1
     echo -ne '>>>                       [20%]\r'
-    sudo apt install kali-tools-802-11 > /dev/null 2>&1
+    sudo apt install -y kali-tools-802-11 > /dev/null 2>&1
     #ADD 802.11 Tools Here.
     echo -ne '>>>>>>>>>>                [40%]\r'
-    sudo apt install kali-tools-bluetooth > /dev/null 2>&1
+    sudo apt install -y kali-tools-bluetooth > /dev/null 2>&1
     #ADD Bluetooth Tools Here.
     echo -ne '>>>>>>>>>>>>>>            [60%]\r'
-    sudo apt install kali-tools-rfid > /dev/null 2>&1
+    sudo apt install -y kali-tools-rfid > /dev/null 2>&1
     #ADD RFID Tools Here.
     echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
-    sudo apt install kali-tools-sdr > /dev/null 2>&1
+    sudo apt install -y kali-tools-sdr > /dev/null 2>&1
     #ADD SDR Tools Here.
     echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
     echo -ne '\n'
