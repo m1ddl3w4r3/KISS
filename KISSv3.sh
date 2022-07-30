@@ -65,8 +65,6 @@ BASE(){
     #Remove code below for personalization
     ##Install Firefox addons.
     cd $AWD
-    firefox "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/" & &>/dev/null
-    firefox "https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/" &  &>/dev/null
     echo -ne '>>>>>>>>>>                [40%]\r'
     ##Install VSCode
     curl -OJL https://go.microsoft.com/fwlink/\?LinkID\=760868 > /dev/null 2>&1
