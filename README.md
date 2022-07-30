@@ -1,0 +1,2 @@
+# KISS
+Kali Setup Script
