@@ -63,10 +63,12 @@ BASE(){
     #Add your code here.
     #################################################################
     #Remove code below for personalization
-    ##Install Firefox addons.
+    
+	##Install Firefox addons.
     cd $AWD
     echo -ne '>>>>>>>>>>                [40%]\r'
-    ##Install VSCode
+    
+	##Install VSCode
     curl -OJL https://go.microsoft.com/fwlink/\?LinkID\=760868 > /dev/null 2>&1
     sudo dpkg -i code*.deb > /dev/null 2>&1
     echo -ne '>>>>>>>>>>>>>>            [60%]\r'
@@ -75,13 +77,15 @@ BASE(){
     code --install-extension grapecity.gc-excelviewer > /dev/null 2>&1
     rm code*.deb > /dev/null 2>&1
     echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
-    ##AppImage Launcher
+    
+	##AppImage Launcher
     wget https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb > /dev/null 2>&1
     sudo dpkg -i ./appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb > /dev/null 2>&1
     echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
     echo -ne '\n'
     echo -e "${GREEN}General Use Tools Installed.${NC}"
-    #Install python Tools
+    
+	#Install python Tools
     echo ""
     echo -e "${GREEN}Installing Python Tools.${NC}"
     echo -ne '>>>                       [20%]\r'
@@ -97,20 +101,21 @@ BASE(){
     echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
     echo -ne '\n'
     echo -e "${GREEN}Python Tools Installed.${NC}"
-    #Install go
+    
+	#Install go
     echo -e ""
     echo -e "${GREEN}Installing GO Tools${NC}"
     echo -ne '>>>                       [20%]\r'
-    sudo apt install gccgo-go -y > /dev/null 2>&1
-    echo -ne '>>>>>>>>>>                [40%]\r'
-    sudo apt install golang-go -y > /dev/null 2>&1
-    echo -ne '>>>>>>>>>>>>>>            [60%]\r'
     #Install go-Lang updater
     git clone https://github.com/udhos/update-golang.git > /dev/null 2>&1
     cd update-golang/
-    echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
+    echo -ne '>>>>>>>>>>                [40%]\r'
     sudo ./update-golang.sh > /dev/null 2>&1
     cd ../
+    echo -ne '>>>>>>>>>>>>>>            [60%]\r'
+    git clone https://github.com/m1ddl3w4r3/Freeze.git > /dev/null 2>&1
+    echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
+   git clone https://github.com/m1ddl3w4r3/Gat.git > /dev/null 2>&1
     echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
     echo -ne '\n'
     echo -e "${GREEN}Go Tools Installed.${NC}"
@@ -142,16 +147,9 @@ GITHUB_TOOLS(){
     echo -ne '>>>>>>>>>>                [40%]\r'
     #################################################################
     #Remove code below for personalization, DO NOT REMOVE the progress bars.
-    git clone https://github.com/$GHUSER/Invoke-Obfuscation.git > /dev/null 2>&1
-    git clone https://github.com/$GHUSER/Invoke-CradleCrafter.git > /dev/null 2>&1
-    git clone https://github.com/$GHUSER/Linkedin2User.git > /dev/null 2>&1
     echo -ne '>>>>>>>>>>>>>>            [60%]\r'
-    git clone https://github.com/$GHUSER/Gat.git > /dev/null 2>&1
-    git clone https://github.com/$GHUSER/PEAS.git > /dev/null 2>&1
-    git clone https://github.com/$GHUSER/Spray.git > /dev/null 2>&1
     echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
     sudo apt install rpcclient -y > /dev/null 2>&1
-    git clone https://github.com/$GHUSER/NMapAutomater.git > /dev/null 2>&1
     git clone https://github.com/$GHUSER/SharpCollection.git > /dev/null 2>&1
     echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
     echo -ne '\n'
@@ -165,62 +163,62 @@ GITHUB_TOOLS(){
 #Custom Tools Section
 #Designed to run custom scripts from your VMWare shared folder to keep them local.
 #Can be used to install further tools or make additional changes to the VM custom to you.
-CUSTOM_TOOLS(){
-  CUSTOMCHECK=''$WD'/.CUSTOM'
-  if [ -f "$CUSTOMCHECK" ]; then
-    echo ""
-    echo -e "${GREEN}Custom Tools Exists Continuing Setup${NC}"
-  else
-    echo -e ""
-    echo -e "${GREEN}Setup VMware shared folder (if enabled)${NC}"
-    sudo mount-shared-folders
-    #################################################################
-    #Add your code here.
-    #################################################################
-    echo ""
-    echo -e "${GREEN}Installing Custom Tools.${NC}"
-    echo -ne '>>>                       [20%]\r'
-    cd $TWD
-    #Add custom scripts
-    cp -R /mnt/hgfs/VMShare/KaliTools/*.zip ./
-    sleep 1
-    unzip Scripts.zip > /dev/null 2>&1
-    rm -rf ./Scripts.zip
-    chmod -R +x Scripts/*/*.sh
-    echo -ne '>>>>>>>>>>                [40%]\r'
-    #CobaltStrike Install from Shared Folder
-    cd $TWD
-    unzip CobaltStrikeInstaller.zip > /dev/null 2>&1
-    rm -rf CobaltStrikeInstaller.zip > /dev/null 2>&1
-    cd CobaltStrikeInstaller/
-    chmod +x ./install.sh
-    sudo apt install -y openjdk-11-jdk > /dev/null 2>&1
-    echo -ne '>>>>>>>>>>>>>>            [60%]\r'
-    #./install.sh > /dev/null 2>&1
-    cd $TWD
-    mv CobaltStrikeInstaller/cobaltstrike $TWD/
-    rm -rf CobaltStrikeInstaller
-    #Nextcloud Client
-    cd $AWD
-    wget https://download.nextcloud.com/desktop/releases/Linux/Nextcloud-3.4.2-x86_64.AppImage > /dev/null 2>&1
-    chmod +x Nextcloud-3.4.2-x86_64.AppImage
-    echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
-    #Change Configs for truely custom setup.
-    cd $TWD
-    unzip Configs.zip > /dev/null 2>&1
-    cd $TWD/Configs
-    cp Test.txt $HOME/Desktop/ > /dev/null 2>&1
-    rm -rf $TWD/Configs.zip
-    cd $TWD
-    rm -rf Configs
-    echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
-    echo -ne '\n'
-    CUSTOM_ALIAS
-    touch $WD/.CUSTOM
-    echo -e "${GREEN}Custom Tools Installed${NC}"
-  fi
-  #################################################################
-}
+#CUSTOM_TOOLS(){
+#  CUSTOMCHECK=''$WD'/.CUSTOM'
+#  if [ -f "$CUSTOMCHECK" ]; then
+#    echo ""
+#    echo -e "${GREEN}Custom Tools Exists Continuing Setup${NC}"
+#  else
+#    echo -e ""
+#    echo -e "${GREEN}Setup VMware shared folder (if enabled)${NC}"
+#    sudo mount-shared-folders
+#    #################################################################
+#    #Add your code here.
+#    #################################################################
+#    echo ""
+#    echo -e "${GREEN}Installing Custom Tools.${NC}"
+#    echo -ne '>>>                       [20%]\r'
+#    cd $TWD
+#    #Add custom scripts
+#    cp -R /mnt/hgfs/VMShare/KaliTools/*.zip ./
+#    sleep 1
+#    unzip Scripts.zip > /dev/null 2>&1
+#    rm -rf ./Scripts.zip
+#    chmod -R +x Scripts/*/*.sh
+#    echo -ne '>>>>>>>>>>                [40%]\r'
+#    #CobaltStrike Install from Shared Folder
+#    cd $TWD
+#    unzip CobaltStrikeInstaller.zip > /dev/null 2>&1
+#    rm -rf CobaltStrikeInstaller.zip > /dev/null 2>&1
+#    cd CobaltStrikeInstaller/
+#    chmod +x ./install.sh
+#    sudo apt install -y openjdk-11-jdk > /dev/null 2>&1
+#    echo -ne '>>>>>>>>>>>>>>            [60%]\r'
+#    #./install.sh > /dev/null 2>&1
+#    cd $TWD
+#    mv CobaltStrikeInstaller/cobaltstrike $TWD/
+#    rm -rf CobaltStrikeInstaller
+#    #Nextcloud Client
+#    cd $AWD
+#    wget https://download.nextcloud.com/desktop/releases/Linux/Nextcloud-3.4.2-x86_64.AppImage > /dev/null 2>&1
+#    chmod +x Nextcloud-3.4.2-x86_64.AppImage
+#    echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
+#    #Change Configs for truely custom setup.
+#    cd $TWD
+#    unzip Configs.zip > /dev/null 2>&1
+#    cd $TWD/Configs
+#    cp Test.txt $HOME/Desktop/ > /dev/null 2>&1
+#    rm -rf $TWD/Configs.zip
+#    cd $TWD
+#    rm -rf Configs
+#    echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
+#    echo -ne '\n'
+#    CUSTOM_ALIAS
+#    touch $WD/.CUSTOM
+#    echo -e "${GREEN}Custom Tools Installed${NC}"
+#  fi
+#  #################################################################
+#}
 ################################################################################
 #RF Section
 #Will install Kali metapackages for 802.11, Bluetooth, RFID, and SDR.
@@ -236,7 +234,7 @@ RF_TOOLS(){
     echo -e "${GREEN}Installing RF Tools.(WiFi + Bluetooth + RFID/NFC + SDR)${NC}"
     mkdir $TWD/RF > /dev/null 2>&1
     echo -ne '>>>                       [20%]\r'
-    sudo apt install -y kali-tools-wireless > /dev/null 2>&1
+    sudo apt install -y kali-tools-802-11 > /dev/null 2>&1
     #ADD 802.11 Tools Here.
     echo -ne '>>>>>>>>>>                [40%]\r'
     sudo apt install -y kali-tools-bluetooth > /dev/null 2>&1
