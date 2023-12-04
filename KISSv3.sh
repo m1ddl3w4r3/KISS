@@ -107,15 +107,22 @@ BASE(){
     echo -e "${GREEN}Installing GO Tools${NC}"
     echo -ne '>>>                       [20%]\r'
     #Install go-Lang updater
-    git clone https://github.com/udhos/update-golang.git > /dev/null 2>&1
+    git clone https://github.com/m1ddl3w4r3/Update-Golang.git > /dev/null 2>&1
     cd update-golang/
     echo -ne '>>>>>>>>>>                [40%]\r'
     sudo ./update-golang.sh > /dev/null 2>&1
     cd ../
     echo -ne '>>>>>>>>>>>>>>            [60%]\r'
-    git clone https://github.com/m1ddl3w4r3/Freeze.git > /dev/null 2>&1
+    
     echo -ne '>>>>>>>>>>>>>>>>>>>>      [80%]\r'
-   git clone https://github.com/m1ddl3w4r3/Gat.git > /dev/null 2>&1
+    git clone https://github.com/m1ddl3w4r3/Gat.git > /dev/null 2>&1
+	cd Gat
+	go install mvdan.cc/garble@latest
+	go mod init Gat/Gat
+	go mod tidy
+	cd utils/
+	go build Mangle.go
+	cd ../../
     echo -ne '>>>>>>>>>>>>>>>>>>>>>>>>>>[100%]\r'
     echo -ne '\n'
     echo -e "${GREEN}Go Tools Installed.${NC}"
