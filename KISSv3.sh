@@ -352,6 +352,7 @@ RUN_SOURCE(){
 #Banner Section
 BANNER(){
 cat << 'EOF'
+
    ____  __  ___   _________  _________
   |    |/  /|   | /   _____/ /   _____/
   |      <  |   | \_____  \  \_____  \
@@ -363,6 +364,7 @@ EOF
 }
 ENDBANNER_REBOOT(){
 cat << 'EOF'
+
    ____  __  ___   _________  _________
   |    |/  /|   | /   _____/ /   _____/
   |      <  |   | \_____  \  \_____  \
@@ -418,7 +420,7 @@ MENU(){
         4) BASE; RF_TOOLS; MENU;;
         5) BASIC_OPSEC; ENDBANNER_REBOOT ;;
         6) ALL_THE_THINGS; ENDBANNER_REBOOT;;
-        #7) ADV_OPSEC;MENU;;
+        7) ADV_OPSEC;MENU;;
         0) exit 0;;
         *) BASE; MENU;;
     esac
