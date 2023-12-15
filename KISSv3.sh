@@ -395,9 +395,8 @@ COLORRED(){
 }
 ################################################################################
 #Menu Section
-READ_FROM_PIPE(){
-  read "$@" <&0;
-}
+READ_FROM_PIPE(){ read "$@" <&0; }
+
 MENU(){
     BANNER
     echo -ne "
