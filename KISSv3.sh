@@ -420,7 +420,7 @@ MENU(){
         6) ALL_THE_THINGS; ENDBANNER_REBOOT;;
         #7) ADV_OPSEC;MENU;;
         0) exit 0;;
-        *) MENU;;
+        *) BASE; MENU;;
     esac
 }
 MENU
