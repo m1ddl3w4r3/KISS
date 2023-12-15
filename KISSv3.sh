@@ -64,7 +64,7 @@ BASE(){
     #################################################################
     #Remove code below for personalization
     
-	##Install Firefox addons.
+	##
     cd $AWD
     echo -ne '>>>>>>>>>>                [40%]\r'
     
