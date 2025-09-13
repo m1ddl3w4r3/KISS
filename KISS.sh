@@ -2,7 +2,7 @@
 # Name: KISS - Kali Initialization & Setup Script
 # Description: This script is designed to quickly setup a Kali Linux machines to fit your needs. Based off the military standard KISS (Keep It Simple Stupid) philosophy.
 # Author: @m1ddl3w4r3 (https://github.com/m1ddl3w4r3)
-# Version: 0.3
+# Version: 1.0
 # Usage:
   
   # Local

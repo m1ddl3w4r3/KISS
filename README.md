@@ -23,7 +23,7 @@ KISS provides automated installation and configuration of the following without 
 
 ### Remote Installation
 ```bash
-curl -fsSL https://github.com/m1ddl3w4r3/KISS.git | sh
+curl -fsSL https://raw.githubusercontent.com/m1ddl3w4r3/KISS/main/KISS.sh | bash
 ```
 WARNING: you may wanna atleasat read it first to see what its going to install on your machine...
 
