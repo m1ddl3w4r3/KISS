@@ -521,7 +521,7 @@ DEB2KALI(){
   print_status "WARNING" "This will convert your Debian system to Kali Linux"
   print_status "WARNING" "This is a destructive operation that will modify your system"
   echo ""
-  read -p "Are you sure you want to continue? (yes/no): " confirm
+  read -p "Are you sure you want to continue? (yes/no): " confirm < /dev/tty
   
   if [[ $confirm != "yes" ]]; then
     print_status "INFO" "Operation cancelled by user"
@@ -660,83 +660,6 @@ DEB2KALI(){
   
   sleep 15
   reboot
-}
-
-
-KALI_AI(){
-  print_section_header "KALI AI CONFIGURATION"
-  
-  # Configure password-less sudo as first step
-  print_status "PROGRESS" "Configuring password-less sudo"
-  local current_user=$(whoami)
-  local sudoers_line="$current_user ALL=(ALL:ALL) NOPASSWD: ALL"
-  
-  # Check if password-less sudo is already configured
-  if sudo grep -q "^$current_user.*NOPASSWD" /etc/sudoers 2>/dev/null || sudo grep -q "^$current_user.*NOPASSWD" /etc/sudoers.d/* 2>/dev/null; then
-    print_status "INFO" "Password-less sudo already configured for $current_user"
-  else
-    # Add password-less sudo configuration
-    if echo "$sudoers_line" | sudo tee /etc/sudoers.d/kiss_ai_nopasswd > /dev/null 2>&1; then
-      sudo chmod 0440 /etc/sudoers.d/kiss_ai_nopasswd > /dev/null 2>&1
-      print_status "SUCCESS" "Password-less sudo configured for $current_user"
-    else
-      print_status "ERROR" "Failed to configure password-less sudo"
-      exit 1
-    fi
-  fi
-  echo ""
-  
-  # Download and install PortSwigger MCP Server
-  print_status "PROGRESS" "Downloading PortSwigger MCP Server"
-  cd $TWD || { print_status "ERROR" "Cannot access Tools directory"; exit 1; }
-  
-  # Check if Java is installed
-  if ! command -v java >/dev/null 2>&1; then
-    print_status "PROGRESS" "Installing Java (required for MCP Server)"
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y default-jdk > /dev/null 2>&1 || {
-      print_status "ERROR" "Failed to install Java"
-      exit 1
-    }
-    print_status "SUCCESS" "Java installed"
-  else
-    print_status "INFO" "Java is already installed"
-  fi
-  
-  # Clone the MCP server repository
-  print_status "SECURITY" "Validating PortSwigger MCP Server repository"
-  if secure_git_clone "https://github.com/PortSwigger/mcp-server.git" "mcp-server" "mcp-server"; then
-    cd mcp-server || { print_status "ERROR" "Cannot access mcp-server directory"; exit 1; }
-    
-    # Build the MCP server extension
-    print_status "PROGRESS" "Building MCP Server extension (this may take a few minutes)"
-    if ./gradlew embedProxyJar > /dev/null 2>&1; then
-      print_status "SUCCESS" "MCP Server extension built successfully"
-      
-      # Copy the built JAR to Applications directory for easy access
-      if [ -f "build/libs/burp-mcp-all.jar" ]; then
-        mkdir -p $AWD/mcp-server > /dev/null 2>&1
-        cp build/libs/burp-mcp-all.jar $AWD/mcp-server/ > /dev/null 2>&1
-        print_status "SUCCESS" "MCP Server JAR copied to $AWD/mcp-server/burp-mcp-all.jar"
-      else
-        print_status "WARNING" "Built JAR not found at expected location"
-      fi
-    else
-      print_status "ERROR" "Failed to build MCP Server extension"
-      exit 1
-    fi
-    cd $TWD
-  else
-    print_status "ERROR" "Failed to clone MCP Server repository"
-    exit 1
-  fi
-  echo ""
-  
-  print_status "PROGRESS" "Configuring Kali AI"
-  print_status "INFO" "Kali AI placeholder - add your specific AI configuration here"
-  echo ""
-  touch $WD/.KALI_AI
-  print_status "SUCCESS" "Kali AI configuration complete"
-  echo ""
 }
 
 ################################################################################
@@ -919,7 +842,7 @@ NC='\e[0m'
 
 ################################################################################
 #Menu Section
-READ_FROM_PIPE(){ read "$@" <&0; }
+READ_FROM_PIPE(){ read "$@" < /dev/tty; }
 
 MENU(){
     BANNER
@@ -934,11 +857,10 @@ MENU(){
     echo -e "${GREEN}  [5]${NC} ${WHITE}WSL Environment${NC} ${CYAN}(Base + configuration for WSL)${NC}"
     echo -e "${GREEN}  [6]${NC} ${WHITE}Debian to Kali Conversion${NC} ${CYAN}(WARNING: This will convert ${NC}${RED}${BOLD}DEBIAN${NC} ${CYAN}to Kali Linux.(useful for cloud based servers))${NC}"
     echo -e "${GREEN}  [7]${NC} ${WHITE}Advanced OPSEC Options${NC} ${CYAN}(Security hardening)${NC}"
-    echo -e "${GREEN}  [8]${NC} ${WHITE}Kali AI Setup${NC} ${CYAN}(Setup Kali Linux to use AI)${NC}"
-    echo -e "${GREEN}  [9]${NC} ${WHITE}Complete Security Suite${NC} ${CYAN}(WARNING: This will install ${NC}${RED}${BOLD}EVERYTHING${NC} ${CYAN}kali offers.)${NC}"
+    echo -e "${GREEN}  [8]${NC} ${WHITE}Complete Security Suite${NC} ${CYAN}(WARNING: This will install ${NC}${RED}${BOLD}EVERYTHING${NC} ${CYAN}kali offers.)${NC}"
     echo -e "${RED}  [0]${NC} ${WHITE}Exit${NC}"
     echo ""
-    print_status "INFO" "Choose an option [1-9] or press Enter for Base Setup:"
+    print_status "INFO" "Choose an option [1-8] or press Enter for Base Setup:"
     READ_FROM_PIPE a;
     case $a in
         1) 
@@ -946,7 +868,7 @@ MENU(){
           if [ -f "$WD/.BASE" ]; then
             print_status "INFO" "Base installation already exists, continuing setup"
             print_status "INFO" "Press Enter to continue..."
-            read -r
+            read -r < /dev/tty
           fi
           BASE; MENU ;;
         2) BASE; GITHUB_TOOLS; MENU ;;
@@ -955,8 +877,7 @@ MENU(){
         5) BASE; WSL_INSTALL; MENU;;
         6) DEB2KALI; MENU ;;
         7) ADV_OPSEC; MENU;;
-        8) KALI_AI; MENU;;
-        9) ALL_THE_THINGS; ENDBANNER_REBOOT;;
+        8) ALL_THE_THINGS; ENDBANNER_REBOOT;;
         1337) OPERATOR_VERIFICATION; MENU ;;
         0) exit 0;;
         *) BASE; MENU;;
@@ -1177,12 +1098,12 @@ OPERATOR_VERIFICATION(){
     print_status "INFO" "Please update the NG_OPTOKEN variable with a valid token"
     echo ""
     print_status "INFO" "Press Enter to return to muggle menu..."
-    read -r
+    read -r < /dev/tty
     MENU
   else
     print_status "SUCCESS" "Valid operator token confirmed"
     print_status "INFO" "${RED}press Enter${NC} to access operator menu"
-    read -r
+    read -r < /dev/tty
     clear
     print_section_header " OPERATOR TOOLSET INSTALLATION"
 
@@ -1198,7 +1119,7 @@ OPERATOR_VERIFICATION(){
 
       print_status "INFO" "Functions are now available in the operator menu"
       print_status "INFO" "Press Enter to return to updated operator menu..."
-      read -r
+      read -r < /dev/tty
 
       # Return to updated menu
       KISS_NG_MENU
