@@ -30,8 +30,8 @@ WARNING: you may wanna atleasat read it first to see what its going to install o
 ### Local Installation
 ```bash
 git clone https://github.com/m1ddl3w4r3/KISS.git
-chmod +x KISS_Github.sh
-sudo ./KISS_Github.sh
+chmod +x KISS.sh
+sudo ./KISS.sh
 ```
 
 ## Configuration Variables
