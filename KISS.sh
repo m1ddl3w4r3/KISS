@@ -186,21 +186,7 @@ CLEANUPSETUP(){
     print_status "ERROR" "Failed to update package repositories"
     exit 1
   fi
-  
-  # System cleanup with validation
-  print_status "PROGRESS" "Performing system cleanup"
-  cd $HOME || { print_status "ERROR" "Cannot access home directory"; exit 1; }
-  
-  # Remove default directories only if they exist
-  for dir in Music Public Templates Videos; do
-    if [ -d "$HOME/$dir" ]; then
-      rm -rf "$HOME/$dir"
-      print_status "INFO" "Removed $HOME/$dir"
-    fi
-  done
-  print_status "SUCCESS" "Default directories cleaned"
-  echo ""
-  
+
   # Create workspace directories with validation
   print_status "PROGRESS" "Creating workspace directories"
   for dir in "$TWD" "$AWD"; do
@@ -218,7 +204,7 @@ CLEANUPSETUP(){
   print_status "PROGRESS" "Installing packages"
   
   # Core packages (minimal set to avoid conflicts)
-  local core_packages="git curl wget ssh-import-id zip gzip python3 pipx" #This is where you can add core packages.
+  local core_packages="git curl wget ssh-import-id zip gzip python3 pipx python3-pip" #This is where you can add core packages.
   print_status "INFO" "Attempting to install core packages: $core_packages"
   sudo DEBIAN_FRONTEND=noninteractive apt install -y $core_packages > /dev/null 2>&1 || print_status "WARNING" "Core package installation had issues - continuing"
   
