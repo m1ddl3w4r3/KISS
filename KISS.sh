@@ -14,12 +14,6 @@
 ################################################################################
 #Settings Section
 
-#Hostname
-VARHOST='Desktop-1337' #Change this to your desired hostname. (must use OPSEC option to set)
-
-#Shared Folder Name.
-SHAREFOLDER='VMShare' #Change this to your desired shared folder name. (must use VM option to set)
-
 #Username
 GHUSER='m1ddl3w4r3' #Change this to your desired github username. Will be used to pull ssh keys for deb2kali conversion.
 
@@ -521,7 +515,7 @@ DEB2KALI(){
   print_status "WARNING" "This will convert your Debian system to Kali Linux"
   print_status "WARNING" "This is a destructive operation that will modify your system"
   echo ""
-  read -p "Are you sure you want to continue? (yes/no): " confirm
+  read -p "Are you sure you want to continue? (yes/no): " confirm < /dev/tty
   
   if [[ $confirm != "yes" ]]; then
     print_status "INFO" "Operation cancelled by user"
@@ -842,7 +836,7 @@ NC='\e[0m'
 
 ################################################################################
 #Menu Section
-READ_FROM_PIPE(){ read "$@" <&0; }
+READ_FROM_PIPE(){ read "$@" < /dev/tty; }
 
 MENU(){
     BANNER
@@ -868,7 +862,7 @@ MENU(){
           if [ -f "$WD/.BASE" ]; then
             print_status "INFO" "Base installation already exists, continuing setup"
             print_status "INFO" "Press Enter to continue..."
-            read -r
+            read -r < /dev/tty
           fi
           BASE; MENU ;;
         2) BASE; GITHUB_TOOLS; MENU ;;
@@ -1098,12 +1092,12 @@ OPERATOR_VERIFICATION(){
     print_status "INFO" "Please update the NG_OPTOKEN variable with a valid token"
     echo ""
     print_status "INFO" "Press Enter to return to muggle menu..."
-    read -r
+    read -r < /dev/tty
     MENU
   else
     print_status "SUCCESS" "Valid operator token confirmed"
     print_status "INFO" "${RED}press Enter${NC} to access operator menu"
-    read -r
+    read -r < /dev/tty
     clear
     print_section_header " OPERATOR TOOLSET INSTALLATION"
 
@@ -1119,7 +1113,7 @@ OPERATOR_VERIFICATION(){
 
       print_status "INFO" "Functions are now available in the operator menu"
       print_status "INFO" "Press Enter to return to updated operator menu..."
-      read -r
+      read -r < /dev/tty
 
       # Return to updated menu
       KISS_NG_MENU
