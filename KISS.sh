@@ -208,9 +208,9 @@ CLEANUPSETUP(){
   print_status "INFO" "Attempting to install core packages: $core_packages"
   sudo DEBIAN_FRONTEND=noninteractive apt install -y $core_packages > /dev/null 2>&1 || print_status "WARNING" "Core package installation had issues - continuing"
   
-  # Verify critical tools are available
+  # Verify core tools are available
   echo ""
-  print_status "PROGRESS" "Verifying critical tools installation"
+  print_status "PROGRESS" "Verifying core tools installation"
   for tool in $core_packages; do
     if command -v "$tool" >/dev/null 2>&1; then
       print_status "INFO" "Verified: $tool is available"
