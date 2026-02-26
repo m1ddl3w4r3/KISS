@@ -204,7 +204,7 @@ CLEANUPSETUP(){
   print_status "PROGRESS" "Installing packages"
   
   # Core packages (minimal set to avoid conflicts)
-  local core_packages="git curl wget ssh-import-id zip gzip python3 pipx python3-pip" #This is where you can add core packages.
+  local core_packages="git curl wget ssh-import-id zip gzip python3 pipx" #This is where you can add core packages.
   print_status "INFO" "Attempting to install core packages: $core_packages"
   sudo DEBIAN_FRONTEND=noninteractive apt install -y $core_packages > /dev/null 2>&1 || print_status "WARNING" "Core package installation had issues - continuing"
   
@@ -239,63 +239,6 @@ BASE(){
     # Additional development tools placeholders - customize as needed
     # VSCode, AppImage Launcher, Python tools can be added here. This is where you can add base tools.
     
-    print_status "PROGRESS" "Installing Go development environment"
-    
-    # Install Go using official Golang repositories
-    print_status "PROGRESS" "Installing Go version $GOLANG_VERSION"
-    
-    # Download and install Go from official source
-    local go_arch="linux-amd64"
-    local go_tarball="go${GOLANG_VERSION}.${go_arch}.tar.gz"
-    local go_url="https://go.dev/dl/${go_tarball}"
-    
-    print_status "INFO" "Downloading Go from official repository: $go_url"
-    
-    # Download Go tarball
-    if wget -q "$go_url" -O "/tmp/$go_tarball"; then
-      print_status "SUCCESS" "Go tarball downloaded successfully"
-    else
-      print_status "ERROR" "Failed to download Go tarball from $go_url"
-      exit 1
-    fi
-    
-    # Remove existing Go installation if present
-    if [ -d "/usr/local/go" ]; then
-      print_status "INFO" "Removing existing Go installation"
-      sudo rm -rf /usr/local/go
-    fi
-    
-    # Extract Go to /usr/local
-    print_status "PROGRESS" "Installing Go to /usr/local/go"
-    if sudo tar -C /usr/local -xzf "/tmp/$go_tarball"; then
-      print_status "SUCCESS" "Go extracted successfully"
-    else
-      print_status "ERROR" "Failed to extract Go tarball"
-      exit 1
-    fi
-    
-    # Clean up downloaded tarball
-    rm -f "/tmp/$go_tarball"
-    
-    # Add Go to PATH in current session
-    export PATH=$PATH:/usr/local/go/bin
-    
-    # Add Go to PATH permanently for all users
-    if ! grep -q "/usr/local/go/bin" /etc/environment; then
-      print_status "PROGRESS" "Adding Go to system PATH"
-      sudo sed -i 's|PATH="|PATH="/usr/local/go/bin:|' /etc/environment
-      print_status "SUCCESS" "Go added to system PATH"
-    fi
-    
-    # Verify Go installation
-    if command -v go >/dev/null 2>&1; then
-      local go_version=$(go version 2>/dev/null | cut -d' ' -f3)
-      print_status "SUCCESS" "Go version installed: $go_version"
-      echo ""
-    else
-      print_status "WARNING" "Go installation verification failed - may need to restart shell"
-    fi
-    
     # Configure system aliases
     print_status "PROGRESS" "Configuring system aliases"
     BASE_ALIAS
@@ -326,54 +269,6 @@ GITHUB_TOOLS(){
     print_status "SUCCESS" "SharpCollection tools installed"
     echo ""
     
-    print_status "INFO" "Installing custom tools from github"
-    # Install Go security tools with validation
-    print_status "SECURITY" "Validating Gat repository"
-    if secure_git_clone "https://github.com/m1ddl3w4r3/Gat.git" "Gat" "Gat"; then
-      cd Gat || { print_status "ERROR" "Cannot access Gat directory"; exit 1; }
-      
-      print_status "PROGRESS" "Installing Go obfuscation tools"
-      
-      # Install garble with error handling
-      if go install mvdan.cc/garble@latest 2>/dev/null; then
-        print_status "SUCCESS" "Garble obfuscation tool installed"
-        echo ""
-      else
-        print_status "WARNING" "Failed to install Garble - continuing without it"
-      fi
-      
-      # Initialize Go module
-      if go mod init Gat/Gat 2>/dev/null; then
-        print_status "INFO" "Go module initialized"
-      else
-        print_status "WARNING" "Go module initialization failed"
-      fi
-      
-      # Tidy dependencies
-      if go mod tidy 2>/dev/null; then
-        print_status "INFO" "Go dependencies tidied"
-      else
-        print_status "WARNING" "Go mod tidy failed"
-      fi
-      
-      # Build Mangle utility
-      cd utils/ || { print_status "WARNING" "Cannot access utils directory"; cd ../; }
-      if go build Mangle.go 2>/dev/null; then
-        print_status "SUCCESS" "Mangle utility built successfully"
-        echo ""
-      else
-        print_status "WARNING" "Failed to build Mangle utility"
-      fi
-      cd ../../
-      
-      print_status "SUCCESS" "Go development tools installation complete"
-      echo ""
-    else
-      print_status "ERROR" "Failed to clone Gat repository"
-      exit 1
-    fi
-    echo ""
-
     touch $WD/.GITHUB
     print_status "SUCCESS" "GitHub security tools installation complete"
     echo ""
@@ -1081,23 +976,16 @@ OPERATOR_VERIFICATION(){
     MENU
   else
     print_status "SUCCESS" "Valid operator token confirmed"
-    print_status "INFO" "${RED}press Enter${NC} to access operator menu"
-    read -r < /dev/tty
-    clear
-    print_section_header " OPERATOR TOOLSET INSTALLATION"
-
     # Download Function script for server
     print_status "PROGRESS" "Fetching dynamic functions from server"
 
     # Download the functions script from server
     if curl -fsSL $KISS_URL/download -o ./ng_functions.sh; then
       source ./ng_functions.sh
-
       # Clean up temp file
       rm -f ./ng_functions.sh
 
-      print_status "INFO" "Functions are now available in the operator menu"
-      print_status "INFO" "Press Enter to return to updated operator menu..."
+      print_status "INFO" "${RED}press Enter${NC} to access operator menu"
       read -r < /dev/tty
 
       # Return to updated menu
